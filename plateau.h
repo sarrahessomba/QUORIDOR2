@@ -4,5 +4,5 @@
 
 #ifndef PLATEAU_H
 #define PLATEAU_H
-void plateau(int N);
+void plateau(int N, int tableau[17][17]);
 #endif //PLATEAU_H

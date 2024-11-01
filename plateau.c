@@ -2,10 +2,12 @@
 // Created by sarra on 26/10/2024.
 //
 #include <stdio.h>
-void plateau(int N) {
-    int tableau[17][17];
+#include "affichage.h"
+void plateau(int N,int tableau[17][17]) {
     if(N==4) {
+        esthetique();
         for(int i = 0; i < 17; i++) {
+           esthetique2(i);
             for(int j = 0; j < 17; j++) {
                 if(i%2==0 && j%2 == 0) {
                     if(i==0 && j==8) {
@@ -33,7 +35,9 @@ void plateau(int N) {
             printf("\n");
         }
     } else {
+        esthetique();
         for(int i = 0; i < 17; i++) {
+            esthetique2(i);
             for(int j = 0; j < 17; j++) {
                 if(i%2==0 && j%2 == 0) {
                     if(i==0 && j==8) {

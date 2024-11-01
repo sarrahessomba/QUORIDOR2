@@ -5,4 +5,8 @@ set(CMAKE_C_STANDARD 11)
 
 add_executable(QUORIDOR2 main.c
         plateau.c
-        plateau.h)
+        plateau.h
+        fonction.joueur.c
+        fonction.joueur.h
+        affichage.c
+        affichage.h)

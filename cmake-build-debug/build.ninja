@@ -61,6 +61,18 @@ build CMakeFiles/QUORIDOR2.dir/plateau.c.obj: C_COMPILER__QUORIDOR2_unscanned_De
   OBJECT_DIR = CMakeFiles\QUORIDOR2.dir
   OBJECT_FILE_DIR = CMakeFiles\QUORIDOR2.dir
 
+build CMakeFiles/QUORIDOR2.dir/fonction.joueur.c.obj: C_COMPILER__QUORIDOR2_unscanned_Debug C$:/Users/sarra/CLionProjects/QUORIDOR2/fonction.joueur.c || cmake_object_order_depends_target_QUORIDOR2
+  DEP_FILE = CMakeFiles\QUORIDOR2.dir\fonction.joueur.c.obj.d
+  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\QUORIDOR2.dir
+  OBJECT_FILE_DIR = CMakeFiles\QUORIDOR2.dir
+
+build CMakeFiles/QUORIDOR2.dir/affichage.c.obj: C_COMPILER__QUORIDOR2_unscanned_Debug C$:/Users/sarra/CLionProjects/QUORIDOR2/affichage.c || cmake_object_order_depends_target_QUORIDOR2
+  DEP_FILE = CMakeFiles\QUORIDOR2.dir\affichage.c.obj.d
+  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\QUORIDOR2.dir
+  OBJECT_FILE_DIR = CMakeFiles\QUORIDOR2.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target QUORIDOR2
@@ -69,7 +81,7 @@ build CMakeFiles/QUORIDOR2.dir/plateau.c.obj: C_COMPILER__QUORIDOR2_unscanned_De
 #############################################
 # Link the executable QUORIDOR2.exe
 
-build QUORIDOR2.exe: C_EXECUTABLE_LINKER__QUORIDOR2_Debug CMakeFiles/QUORIDOR2.dir/main.c.obj CMakeFiles/QUORIDOR2.dir/plateau.c.obj
+build QUORIDOR2.exe: C_EXECUTABLE_LINKER__QUORIDOR2_Debug CMakeFiles/QUORIDOR2.dir/main.c.obj CMakeFiles/QUORIDOR2.dir/plateau.c.obj CMakeFiles/QUORIDOR2.dir/fonction.joueur.c.obj CMakeFiles/QUORIDOR2.dir/affichage.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\QUORIDOR2.dir
