@@ -10,8 +10,9 @@ int menu () {
         printf("1. Deplacer son pion\n");
         printf("2. Placer une barriere\n");
         printf("3. Passer son tour\n");
+        printf("4. Annuler le coup\n");
         scanf("%d", &choixx);
-    }while(choixx != 1 && choixx != 2 && choixx != 3);
+    }while(choixx != 1 && choixx != 2 && choixx != 3 && choixx != 4);
     return choixx;
 }
 void deplacer (int i,int x, int y,int tableau[17][17],int N) {
