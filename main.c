@@ -5,11 +5,8 @@ int main() {
     int choix,x,y,condition;
     int N; int choixmenu;
     int plateaujeu[17][17]={{0}};
-    printf("1. Lancer une nouvelle partie\n");
+    printf("1. JOUER\n");
     printf("2. SORTIE\n");
-    printf("3. Afficher les scores des joueurs\n");
-    printf("4. Afficher l aide\n");
-    printf("5.  Reprendre une partie sauvegardee\n");
     scanf("%d",&choix);
     switch(choix) {
         case 1:
@@ -31,7 +28,7 @@ int main() {
                             scanf("%d",&x);
                             printf("y=\n");
                             scanf("%d",&y);
-                            if((x%2 == 0 && y%2 == 0)) {//incomplet
+                            if((x%2 == 0 && y%2 == 0)) {
                                 deplacer(i,x,y,plateaujeu,N);
                                 condition = 0;
                             }else {
