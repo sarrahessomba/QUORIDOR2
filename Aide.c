@@ -1,6 +1,4 @@
-//
-// Created by SILO ALEXANDRE-ALEXIS on 12/11/2024.
-//
+
 
 #include <stdio.h>
 #include "Aide.h"
@@ -15,10 +13,10 @@ void afficherAide() {
 
 }
 
-void afficherScors() {
+void afficherScores() {
     FILE *file = fopen("scores.txt", "r");
     if (file == NULL) {
-        printf("Aucun score sauvegardé pour le moment.\n");
+        printf("Aucun score sauvegardé$e pour le moment.\n");
         return;
     }
 
@@ -33,11 +31,11 @@ void afficherScors() {
     void reprendre_partie(int plateau[17][17], int *N) {
         FILE *file = fopen("sauvegarde_partie.txt", "r");
         if (file == NULL) {
-            printf("Aucune partie sauvegardée trouvée.\n");
+            printf("Aucune partie sauvegardee trouvee.\n");
             return;
         }
 
-        // Chargement du nombre de joueurs
+        // nombre de joueurs
         fscanf(file, "%d", N);
 
         // Chargement du plateau

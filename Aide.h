@@ -1,6 +1,4 @@
-//
-// Created by SILO ALEXANDRE-ALEXIS on 12/11/2024.
-//
+
 
 #ifndef AIDE_H
 #define AIDE_H
