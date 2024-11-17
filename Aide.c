@@ -28,6 +28,7 @@ void afficherScores() {
     }
 }
 
+
     void reprendre_partie(int plateau[17][17], int *N) {
         FILE *file = fopen("sauvegarde_partie.txt", "r");
         if (file == NULL) {
