@@ -1,1 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Structure pour représenter un joueur
+typedef struct {
+    char nom[50];
+    int score;
+} Joueur;
+
+// Prototype des fonctions
+void chargerScores(FILE *fichier, Joueur joueurs[], int *nbJoueurs);
+void sauvegarderScores(FILE *fichier, Joueur joueurs[], int nbJoueurs);
+int trouverJoueur(Joueur joueurs[], int nbJoueurs, const char *nom);
+void mettreAJourScore(Joueur joueurs[], int *nbJoueurs, const char *nom, int points);
+
+// Fonction principale pour executer le sous-programme
+int main() {
+    Joueur joueurs[100]; // Tableau pour stocker les joueurs
+    int nbJoueurs = 0;   // Nombre de joueurs connus
+    char nomFichier[] = "scores.txt";
+    FILE *fichier;
+
+    // Charger les scores existants
+    fichier = fopen(nomFichier, "r");
+    if (fichier != NULL) {
+        chargerScores(fichier, joueurs, &nbJoueurs);
+        fclose(fichier);
+    }
+
+    // Exemples de mise à jour des scores
+    mettreAJourScore(joueurs, &nbJoueurs, "Alice", 5); // Nouveau joueur ou mise à jour
+    mettreAJourScore(joueurs, &nbJoueurs, "Bob", 5);   // Nouveau joueur ou mise à jour
+    mettreAJourScore(joueurs, &nbJoueurs, "Alice", 10); // Mise à jour pour Alice
+
+    // Sauvegarder les scores mis à jour
+    fichier = fopen(nomFichier, "w");
+    if (fichier != NULL) {
+        sauvegarderScores(fichier, joueurs, nbJoueurs);
+        fclose(fichier);
+    }
+
+    return 0;
+}
+
+// Charger les scores depuis un fichier
+void chargerScores(FILE *fichier, Joueur joueurs[], int *nbJoueurs) {
+    while (fscanf(fichier, "%s %d", joueurs[*nbJoueurs].nom, &joueurs[*nbJoueurs].score) == 2) {
+        (*nbJoueurs)++;
+    }
+}
+
+// Sauvegarder les scores dans un fichier
+void sauvegarderScores(FILE *fichier, Joueur joueurs[], int nbJoueurs) {
+    for (int i = 0; i < nbJoueurs; i++) {
+        fprintf(fichier, "%s %d\n", joueurs[i].nom, joueurs[i].score);
+    }
+}
+
+// Trouver l'index d'un joueur dans le tableau (-1 si non trouvé)
+int trouverJoueur(Joueur joueurs[], int nbJoueurs, const char *nom) {
+    for (int i = 0; i < nbJoueurs; i++) {
+        if (strcmp(joueurs[i].nom, nom) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Mise à jour du score d'un joueur
+void mettreAJourScore(Joueur joueurs[], int *nbJoueurs, const char *nom, int points) {
+    int index = trouverJoueur(joueurs, *nbJoueurs, nom);
+
+    if (index == -1) {
+        // Nouveau joueur
+        strcpy(joueurs[*nbJoueurs].nom, nom);
+        joueurs[*nbJoueurs].score = points;
+        (*nbJoueurs)++;
+    } else {
+        // Joueur existant
+        joueurs[index].score += points;
+    }
+}
+
 
