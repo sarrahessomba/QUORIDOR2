@@ -1,1 +1,18 @@
+bool deplacerPion(int joueur, int *ligneActuelle, int *colActuelle, int nouvelleLigne, int nouvelleColonne) {
+    // Vérifie si le déplacement reste dans les limites du plateau et si la case est vide
+    if (estDeplacementValide(nouvelleLigne, nouvelleColonne)) {
+        // Vérifie les conditions pour un déplacement horizontal ou vertical (absence de barrière)
+        if (abs(nouvelleLigne - *ligneActuelle) + abs(nouvelleColonne - *colActuelle) == 1) {
+            *ligneActuelle = nouvelleLigne;
+            *colActuelle = nouvelleColonne;
+            return true;
+        }
+
+        // Cas de saut par-dessus un pion adverse
+        // Ajouter ici la logique de saut avec vérification de la case au-delà du pion
+
+        return false; // Mouvement invalide si les conditions ne sont pas remplies
+    }
+    return false; // Mouvement invalide
+}
 
