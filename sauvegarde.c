@@ -3,7 +3,7 @@
 #include <string.h>
 #include "sauvegarde.h"
 void sauvegarder_partie(int tableau[17][17], int joueurs_x[4], int joueurs_y[4], int N, int joueur_actuel){
-
+//ouverture d'un fichier permettant la sauvegarde de chaque élement étape par étape
     FILE *fichier = fopen("sauvegarde_partie.txt", "w");
     if (fichier == NULL) {
         printf("Erreur : Impossible de sauvegarder la partie.\n");
