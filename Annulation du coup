@@ -1,1 +1,10 @@
-
+EtatJeu annuler_coup() {
+    if (historique_index > 0) {
+        historique_index--;
+        printf("Le dernier coup a été annulé.\n");
+        return historique[historique_index]; // Retourne l'état précédent
+    } else {
+        printf("Aucune action à annuler.\n");
+    }
+    return historique[0]; // Retourne l'état initial si rien à annuler
+}
