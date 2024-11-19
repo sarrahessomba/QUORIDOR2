@@ -1,6 +1,7 @@
 #ifndef AIDE_H
 #define AIDE_H
 
+//Protype des fonctions permettant les choix 5à 5 du menu
 
 void afficherAide();
 
