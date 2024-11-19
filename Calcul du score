@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 // Structure pour représenter un joueur
 typedef struct {
     char nom[50];
@@ -27,11 +23,6 @@ int main() {
         chargerScores(fichier, joueurs, &nbJoueurs);
         fclose(fichier);
     }
-
-    // Exemples de mise à jour des scores
-    mettreAJourScore(joueurs, &nbJoueurs, "Alice", 5); // Nouveau joueur ou mise à jour
-    mettreAJourScore(joueurs, &nbJoueurs, "Bob", 5);   // Nouveau joueur ou mise à jour
-    mettreAJourScore(joueurs, &nbJoueurs, "Alice", 10); // Mise à jour pour Alice
 
     // Sauvegarder les scores mis à jour
     fichier = fopen(nomFichier, "w");
