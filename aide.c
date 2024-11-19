@@ -2,6 +2,7 @@
 #include "Aide.h"
 
 void afficherAide() {
+    // affiche les règles du jeu
     printf("Regles du jeu :\n");
     printf("- Chaque joueur doit atteindre le bord oppose du plateau pour gagner.\n");
     printf("- A chaque tour, un joueur peut deplacer son pion ou placer une barriere ou meme passer son tour.\n");
@@ -10,7 +11,7 @@ void afficherAide() {
     printf("- Le jeu se termine lorsqu'un joueur atteint le bord oppose de sa ligne de départ.\n");
 
 }
-
+// permet d'afficher les scores 
 void afficherScores() {
 
     FILE *file = fopen("scores.txt", "r");
@@ -27,7 +28,7 @@ void afficherScores() {
     }
 }
 
-
+// charge une partie après la sauvegarde de celle-ci
     void reprendre_partie(int plateau[17][17], int *N) {
         FILE *file = fopen("sauvegarde_partie.txt", "r");
         if (file == NULL) {
