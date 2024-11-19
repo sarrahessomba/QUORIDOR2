@@ -1,48 +1,40 @@
-#include <stdbool.h>
-#include <stdio.h>
+#include <stdbool.h> // Pour bool, true, false
 
-#define TAILLE_PLATEAU 9
+#define TAILLE_PLATEAU 9 // Taille du plateau
 
-// Plateau de jeu représenté par une matrice
-char plateau[TAILLE_PLATEAU][TAILLE_PLATEAU];
-
-// Vérifie si un déplacement est valide et dans les limites du plateau
-bool estDeplacementValide(int x, int y) {
-    return (x >= 0 && x < TAILLE_PLATEAU && y >= 0 && y < TAILLE_PLATEAU && plateau[x][y] == ' ');
+// Vérifie si une position est accessible sur le plateau
+bool estDeplacementValide(int x, int y, int plateau[TAILLE_PLATEAU][TAILLE_PLATEAU]) {
+    return x >= 0 && x < TAILLE_PLATEAU && y >= 0 && y < TAILLE_PLATEAU && plateau[x][y] == 0;
 }
 
-// Fonction qui vérifie si un chemin est disponible pour un joueur donné
-bool cheminDisponible(int ligneDepart, int colDepart, int ligneBut) {
+// Vérifie si un joueur a un chemin vers sa ligne de but
+bool cheminDisponible(int ligneDepart, int colonneDepart, int ligneBut, int plateau[TAILLE_PLATEAU][TAILLE_PLATEAU]) {
     bool visite[TAILLE_PLATEAU][TAILLE_PLATEAU] = {false};
     int fileX[TAILLE_PLATEAU * TAILLE_PLATEAU];
     int fileY[TAILLE_PLATEAU * TAILLE_PLATEAU];
     int debut = 0, fin = 0;
 
-    // Initialisation de la file avec la position de départ
+    // Initialiser la file avec la position de départ
     fileX[fin] = ligneDepart;
-    fileY[fin] = colDepart;
+    fileY[fin] = colonneDepart;
     fin++;
-    visite[ligneDepart][colDepart] = true;
+    visite[ligneDepart][colonneDepart] = true;
 
-    // Directions de déplacement (haut, bas, gauche, droite)
-    int dX[] = {-1, 1, 0, 0};
-    int dY[] = {0, 0, -1, 1};
-
-    // Parcours BFS
+    // Parcours en largeur (BFS)
     while (debut < fin) {
         int x = fileX[debut];
         int y = fileY[debut];
         debut++;
 
-        // Vérifie si la ligne de but est atteinte
+        // Si la ligne de but est atteinte
         if (x == ligneBut) return true;
 
-        // Parcourt les directions possibles
+        // Explorer les cases voisines
         for (int i = 0; i < 4; i++) {
-            int nx = x + dX[i];
-            int ny = y + dY[i];
+            int nx = x + (i == 0 ? -1 : (i == 1 ? 1 : 0)); // Haut/Bas
+            int ny = y + (i == 2 ? -1 : (i == 3 ? 1 : 0)); // Gauche/Droite
 
-            if (estDeplacementValide(nx, ny) && !visite[nx][ny]) {
+            if (estDeplacementValide(nx, ny, plateau) && !visite[nx][ny]) {
                 visite[nx][ny] = true;
                 fileX[fin] = nx;
                 fileY[fin] = ny;
@@ -51,17 +43,17 @@ bool cheminDisponible(int ligneDepart, int colDepart, int ligneBut) {
         }
     }
 
-    // Aucun chemin trouvé
-    return false;
+    return false; // Aucun chemin trouvé
 }
 
 // Vérifie si la partie est bloquée
-bool verifierBlocagePartie(int lignesDepart[], int colonnesDepart[], int lignesBut[], int nombreDeJoueurs) {
-    for (int i = 0; i < nombreDeJoueurs; i++) {
-        if (cheminDisponible(lignesDepart[i], colonnesDepart[i], lignesBut[i])) {
-            return false; // Au moins un joueur peut encore atteindre sa ligne de but
-        }
-    }
-    return true; // Tous les joueurs sont bloqués
+bool partieBloquee(int ligneDepart, int colonneDepart, int ligneBut, int plateau[TAILLE_PLATEAU][TAILLE_PLATEAU]) {
+    return !cheminDisponible(ligneDepart, colonneDepart, ligneBut, plateau);
 }
+
+
+
+
+
+
 
