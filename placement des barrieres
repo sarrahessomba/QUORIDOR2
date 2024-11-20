@@ -1,0 +1,24 @@
+int valid_barriere(int x,int y,int direction_bar,joueur joueur_actif,int tab[17][17]) {
+    if(x<0 || x>16 || y<0 || y>16 || tab[x][y]!=6 || (direction_bar==1 && tab[x-1][y]!=6) || (direction_bar==2 && tab[x+1][y]!=6) || (direction_bar==3 && tab[x][y-1]!=6) || (direction_bar==4 && tab[x][y+1]!=6)) {
+        return 0;
+    }
+    if(joueur_actif.nb_barr==0) {
+        printf("Vous n'avez plus de barrieres\n");
+        return 0;
+    }
+    return 1;
+}
+int placer_barriere(int x,int y,int direction_bar,int tab[17][17],joueur joueur_actif) {
+    tab[x][y]=7;
+    if(direction_bar==1) {
+        tab[x-1][y]=7;
+    }else if(direction_bar==2) {
+        tab[x+1][y]=7;
+    }else if(direction_bar==3) {
+        tab[x][y-1]=7;
+    }else {
+        tab[x][y+1]=7;
+    }
+    joueur_actif.nb_barr-=1;
+    return joueur_actif.nb_barr;
+};
