@@ -1,17 +1,27 @@
+#include <stdio.h>
 #include "timer.h"
 
-// Initialiser le timer avec une durée limite
-void init_timer(Timer *timer, int time_limit) {
-    timer->start_time = time(NULL);
-    timer->time_limit = time_limit;
+// Fonction pour jouer un tour et calculer le temps écoulé pour le joueur
+void jouerTour(Joueur *joueur) {
+    time_t debutTour = time(NULL);  // Enregistre le temps de début du tour
+
+    printf("Tour en cours. Appuyez sur 'e' pour terminer le tour.\n");
+    while (getchar() != 'e');  // Attend que l'utilisateur appuie sur 'e'
+
+    time_t finTour = time(NULL);  // Temps à la fin du tour
+    double tempsEcoule = difftime(finTour, debutTour);
+    joueur->tempsTotal += tempsEcoule;  // Ajoute le temps écoulé au total
+
+    printf("Temps écoulé pour ce tour : %.0f secondes\n", tempsEcoule);
 }
 
-// Obtenir le temps écoulé depuis le début du timer
-int get_elapsed_time(Timer *timer) {
-    return (int)(time(NULL) - timer->start_time);
-}
-
-// Vérifier si le temps est écoulé
-int is_time_over(Timer *timer) {
-    return get_elapsed_time(timer) >= timer->time_limit;
+// Fonction pour trouver le joueur avec le plus de temps de jeu
+int JoueurLePlusLongTemps(Joueur joueurs[], int nombreJoueurs) {
+    int indiceMax = 0;
+    for (int i = 1; i < nombreJoueurs; i++) {
+        if (joueurs[i].tempsTotal > joueurs[indiceMax].tempsTotal) {
+            indiceMax = i;
+        }
+    }
+    return indiceMax;
 }
