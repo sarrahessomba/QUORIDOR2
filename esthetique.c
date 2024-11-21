@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "esthetique.h"
+#include "ESTHETIQUE.h"
 
 // Appel de la fonction permettant de rendre plus esthetique le plateau
 // Structure pour un joueur
