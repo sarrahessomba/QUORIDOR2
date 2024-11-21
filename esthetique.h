@@ -4,7 +4,8 @@
 #define CASE_VIDE '·'
 #define BARRIERE '|'
 #define BARRIERE_H'-'
-// utilisation de cractères unicode
+#define MAX_PLAYERS 4
+
 
 void esthetique(void);
 void esthetique2 (int i);
