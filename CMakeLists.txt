@@ -9,4 +9,10 @@ add_executable(QUORIDOR2 main.c
         fonction.joueur.c
         fonction.joueur.h
         affichage.c
-        affichage.h)
+        affichage.h
+        condition.c
+        condition.h
+        timer.h
+        timer.c
+        score.c
+        score.h)
