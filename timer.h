@@ -3,16 +3,14 @@
 
 #include <time.h>
 
-// Définition de la structure pour le timer
+// Structure pour stocker les informations de chaque joueur
 typedef struct {
-    time_t start_time;
-    int time_limit; // Durée limite en secondes
-} Timer;
+    double tempsTotal; // Temps total accumulé pour chaque joueur par partie
+    int points;        // Points du joueur pour calculer les malus à la fin de la partie
+} Joueur;
 
 // Prototypes des fonctions
-void init_timer(Timer *timer, int time_limit);
-int get_elapsed_time(Timer *timer);
-int is_time_over(Timer *timer);
+void jouerTour(Joueur *joueur);
+int JoueurLePlusLongTemps(Joueur joueurs[], int nombreJoueurs);
 
-#endif
-
+#endif // TIMER_H
