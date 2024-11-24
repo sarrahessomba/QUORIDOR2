@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#define TAILLE 9 // Taille du plateau
+#define TAILLE 17 // Taille du plateau adaptée pour 17x17
 
 // Définition du plateau et des barrières
 char plateau[TAILLE][TAILLE];
@@ -67,10 +67,10 @@ int main() {
         for (int j = 0; j < TAILLE; j++)
             plateau[i][j] = '.';
 
-    plateau[4][4] = 'B'; // Exemple de barrière
+    plateau[8][8] = 'B'; // Exemple de barrière
 
     // Position et cible du joueur (exemple pour un joueur)
-    int joueur_x = 0, joueur_y = 4, cible = 8;
+    int joueur_x = 0, joueur_y = 8, cible = 16;
 
     if (est_bloque(joueur_x, joueur_y, cible)) {
         printf("La partie est bloquée !\n");
