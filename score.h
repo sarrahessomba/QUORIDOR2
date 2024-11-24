@@ -12,9 +12,6 @@
 // Structure pour représenter un joueur
 
 // Prototypes des fonctions
-void chargerScores(FILE *fichier, joueur joueurs[], int *nbJoueurs);
-void Afficher_Scores(FILE *fichier, joueur joueurs[], int nbJoueurs);
-int trouverJoueur(joueur joueurs[], int nbJoueurs, const char *nom);
-void mettreAJourScore(joueur joueurs[], int *nbJoueurs, const char *nom, int points);
-
+void mettreAJourScore(joueur joueurs[], int nbJoueurs,const char *nomdufichier);
+void afficherScores(const char * nomdufichier,joueur * joueur);
 #endif //SCORE_H

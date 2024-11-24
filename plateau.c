@@ -9,9 +9,9 @@ void init_tab(int tab[17][17],int N,joueur joueur1,joueur joueur2,  joueur joueu
         for (int i = 0; i < 17; i++) {
             for (int j = 0; j < 17; j++) {
                 if(i%2==0 && j%2==0) {
-                    if(i==joueur1.position.x && j==joueur1.position.y) {
+                    if(i==0 && j==8) {
                         tab[i][j]=joueur1.pion;//case initiale du joueur 1
-                    }else if(i==joueur2.position.x && j==joueur2.position.y) {
+                    }else if(i==16 && j==8) {
                         tab[i][j]=joueur2.pion;//case initiale du joueur 2
                     }else {
                         tab[i][j]=0;// Autres cases vides
@@ -53,61 +53,51 @@ void affichage_plateau(int tab[17][17]) {
         printf("\n");
     }
 }
+void sauvegarderPartie(int plateau[17][17],int player_turn ,joueur joueurs[], int nbJoueurs, const char *nomFichier) {
+    FILE *fichier = fopen(nomFichier, "w");
+    if (fichier == NULL) {
+        printf("Erreur lors de l'ouverture du fichier pour sauvegarde\n");
+        return;
+    }
 
-/*
-void plateau(int N,int tableau[17][17]) {
-    if(N==4) {
-        esthetique();
-        for(int i = 0; i < 17; i++) {
-           esthetique2(i);
-            for(int j = 0; j < 17; j++) {
-                if(i%2==0 && j%2 == 0) {
-                    if(i==0 && j==8) {
-                        tableau[i][j] = 1;
-                        printf("%d ", tableau[i][j]);
-                    }else if(i==8 && j==0) {
-                        tableau[i][j] = 2;
-                        printf("%d ", tableau[i][j]);
-                    }else if(i==16 && j==8) {
-                        tableau[i][j] = 3;
-                        printf("%d ", tableau[i][j]);
-                    }else if(i==8 && j==16) {
-                        tableau[i][j] = 4;
-                        printf("%d ", tableau[i][j]);
-                    }else {
-                        tableau[i][j] = 0;
-                        printf("%d ", tableau[i][j]);
-                    }
-                }else if (i%2 !=0 || j%2 !=0) {
-                    //6=Pas de barriere
-                    tableau[i][j] =6 ;
-                    printf("%d ", tableau[i][j]);
-                }
-            }
-            printf("\n");
+    // Sauvegarder les joueurs
+    fprintf(fichier,"%d\n",nbJoueurs);
+    //sauvergarde du tour
+    fprintf(fichier,"%d\n",player_turn);
+    for(int i=0;i<nbJoueurs;i++) {
+        fprintf(fichier,"%s %d %d %d %d\n", joueurs[i].nom, joueurs[i].pion, joueurs[i].score,joueurs[i].position.x,joueurs[i].position.y);
+    }
+
+    // Sauvegarder le plateau
+    for (int i = 0; i < 17; i++) {
+        for (int j = 0; j < 17; j++) {
+            fprintf(fichier, " %d", plateau[i][j]);
         }
-    } else {
-        esthetique();
-        for(int i = 0; i < 17; i++) {
-            esthetique2(i);
-            for(int j = 0; j < 17; j++) {
-                if(i%2==0 && j%2 == 0) {
-                    if(i==0 && j==8) {
-                        tableau[i][j] = 1;
-                        printf("%d ", tableau[i][j]);
-                    }else if(i==16 && j==8) {
-                        tableau[i][j] = 2;
-                        printf("%d ", tableau[i][j]);
-                    }else {
-                        tableau[i][j] = 0;
-                        printf("%d ", tableau[i][j]);
-                    }
-                }else {
-                    tableau[i][j] = 6;
-                    printf("%d ", tableau[i][j]);
-                }
-            }
-            printf("\n");
+        fprintf(fichier, "\n");
+    }
+    fclose(fichier);
+    printf("Partie sauvegardee dans '%s'.\n", nomFichier);
+}
+void chargerPartie(int plateau[17][17], int * player_turn,joueur joueurs[], int *nbJoueurs, const char *nomFichier) {
+    FILE *fichier = fopen(nomFichier, "r");
+    if (fichier == NULL) {
+        printf("Erreur lors de l'ouverture du fichier pour chargement\n");
+        return;
+    }
+    // Charger les informations des joueurs
+    fscanf(fichier, "%d", nbJoueurs);
+    //Charger le tour
+    fscanf(fichier, "%d", player_turn);
+    for (int i = 0; i < *nbJoueurs; i++) {
+        fscanf(fichier, "%s %d %d %d %d", joueurs[i].nom, &joueurs[i].pion, &joueurs[i].score,&joueurs[i].position.x, &joueurs[i].position.y);
+    }
+
+    // Charger le plateau
+    for (int i = 0; i < 17; i++) {
+        for (int j = 0; j < 17; j++) {
+            fscanf(fichier, " %d", &plateau[i][j]);
         }
     }
-}*/
+    fclose(fichier);
+    printf("Partie chargee depuis '%s'.\n", nomFichier);
+}

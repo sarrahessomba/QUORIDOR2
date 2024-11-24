@@ -22,4 +22,6 @@ int valid_deplacer(int direction,joueur joueur_actif,int tab[17][17]);
 int a_gagner(joueur joueur1,joueur joueur2,joueur joueur3,joueur joueur4,int N);
 int placer_barriere(int x,int y,int direction_bar,int tab[17][17],joueur joueur_actif);
 int valid_barriere(int x,int y,int direction_bar,joueur joueur_actif,int tab[17][17]);
+void reprendre_partie(int plateau[17][17], int *N);
+int Annuler_coup(int player_turn,joueur joueur_actif,joueur joueur1,joueur joueur2,joueur joueur3,joueur joueur4,int plateau[17][17],int N);
 #endif //FONCTION_JOUEUR_H

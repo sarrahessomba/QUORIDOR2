@@ -6,4 +6,5 @@
 #define AFFICHAGE_H
 void esthetique(void);
 void esthetique2 (int i);
+void afficherAide();
 #endif //AFFICHAGE_H

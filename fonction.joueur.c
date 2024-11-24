@@ -43,20 +43,20 @@ joueur deplacer(int direction,joueur joueur_actif,joueur adversaire,joueur adver
                 if(((tab[adv_x-1][adv_y]==7)&& direction==1)|| ((tab[adv_x+1][adv_y]==7) && direction==2)) {//barriere derriere le joueur adverse
                     printf("3.Gauche ou 4.Droite\n");
                     scanf("%d",&direct);
-                    while(direct!=3 && direct!=4) {
+                    while(direct!=3 && direct!=4) {//blindage
                         printf("Entrer 3 ou 4\n");
                         scanf("%d",&direct);
                     }
-                    if(direct==3) {
+                    if(direct==3) {//
                         y=y-2;
                     }else {
                         y=y+2;
                     }
                 }else
                 if(adv_x==0 || adv_x==16) {//bordures x
-                    if(adv_y==0) {//coin
+                    if(adv_y==0) {//coin 0 0
                         y= y+2;
-                    }else if (adv_y==16) {//coin
+                    }else if (adv_y==16) {//coin 0 16
                         y= y-2;
                     }else {
                         int choix;
@@ -72,15 +72,15 @@ joueur deplacer(int direction,joueur joueur_actif,joueur adversaire,joueur adver
                             y= y+2;
                         }
                     }
-                }else if(tab[adv_x-1][adv_y]!=7 || tab[adv_x+1][adv_y]!=7) {
-                    if(direction==1) {
+                }else if(tab[adv_x-1][adv_y]!=7 || tab[adv_x+1][adv_y]!=7) {//pas de barriere
+                    if(direction==1) {// deplace de  2 cases en  haut
                         x= x-2;
-                    }else {
-                        x= x-2;
+                    }else { // deplace de 2 cases en bas
+                        x= x+2;
                     }
                 }
-            }else if(direction==3 || direction==4) {
-                if((tab[adv_x][adv_y-1]==7 && direction==3) || ((tab[adv_x][adv_y+1]==7) && direction==4)) {
+            }else if(direction==3 || direction==4) {//gauche ou droite
+                if((tab[adv_x][adv_y-1]==7 && direction==3) || ((tab[adv_x][adv_y+1]==7) && direction==4)) {//barrière derriere la case
                     int direct;
                         printf("1.Haut ou 2.Bas\n");
                         scanf("%d",&direct);
@@ -95,9 +95,9 @@ joueur deplacer(int direction,joueur joueur_actif,joueur adversaire,joueur adver
                         }
                 }else
                 if(adv_y==0 || adv_y==16) {//bordures y
-                    if(adv_x==0) { //coin
+                    if(adv_x==0) { //coin 0 0
                         x= x+2;
-                    }else if(adv_x==16) {//coin
+                    }else if(adv_x==16) {//coin 16 0
                         x= x-2;
                     }else {
                         int choix;
@@ -113,17 +113,11 @@ joueur deplacer(int direction,joueur joueur_actif,joueur adversaire,joueur adver
                             x= x+2;
                         }
                     }
-                }else if((tab[adv_x][adv_y+1]!=7) && tab[adv_x][adv_y-1]!=7) {
+                }else if((tab[adv_x][adv_y+1]!=7) || tab[adv_x][adv_y-1]!=7) {
                     if(direction==3) {
                         y= y-2;
                     }else {
                         y= y+2;
-                    }
-                }else if(tab[adv_x-1][adv_y]!=7 || tab[adv_x+1][adv_y]!=7) {
-                    if(direction==1) {
-                        x= x-2;
-                    }else {
-                        x= x-2;
                     }
                 }
             }
@@ -175,7 +169,7 @@ joueur deplacer(int direction,joueur joueur_actif,joueur adversaire,joueur adver
                     if(direction==1) {
                         x= x-2;
                     }else {
-                        x= x-2;
+                        x= x+2;
                     }
                 }
             }else if(direction==3 || direction==4) {
@@ -211,17 +205,11 @@ joueur deplacer(int direction,joueur joueur_actif,joueur adversaire,joueur adver
                             x= x+2;
                         }
                     }
-                }else if((tab[x][y+1]!=7) && tab[x][y-1]!=7) {
+                }else if((tab[x][y+1]!=7) || tab[x][y-1]!=7) {
                     if(direction==3) {
                         y= y-2;
                     }else {
                         y= y+2;
-                    }
-                }else if(tab[x-1][y]!=7 || tab[x+1][y]!=7) {
-                    if(direction==1) {
-                        x= x-2;
-                    }else {
-                        x= x-2;
                     }
                 }
             }
@@ -240,6 +228,8 @@ int a_gagner(joueur joueur1,joueur joueur2,joueur joueur3,joueur joueur4,int N) 
         }
         if(joueur2.position.x==0) {
             return 2;
+        }if(joueur1.nb_barr==0 && joueur2.nb_barr==0) {
+            return -1;
         }
         return 0;
     }else {
@@ -254,6 +244,9 @@ int a_gagner(joueur joueur1,joueur joueur2,joueur joueur3,joueur joueur4,int N) 
         }
         if(joueur4.position.y==0) {
             return 4;
+        }
+        if(joueur1.nb_barr==0 && joueur2.nb_barr==0 && joueur3.nb_barr==0 && joueur4.nb_barr==0) {
+            return -1;
         }
         return 0;
     }
@@ -279,58 +272,94 @@ int placer_barriere(int x,int y,int direction_bar,int tab[17][17],joueur joueur_
     }else {
         tab[x][y+1]=7;
     }
-    joueur_actif.nb_barr-=1;
+    joueur_actif.nb_barr=joueur_actif.nb_barr-1;
     return joueur_actif.nb_barr;
 };
-/*int menu () {
-    int choixx;
-    do {
-        printf("1. Deplacer son pion\n");
-        printf("2. Placer une barriere\n");
-        printf("3. Passer son tour\n");
-        scanf("%d", &choixx);
-    }while(choixx != 1 && choixx != 2 && choixx != 3);
-    return choixx;
+void reprendre_partie(int plateau[17][17], int *N) {
+    FILE *file = fopen("sauvegarde_partie.txt", "r");
+    if (file == NULL) {
+        printf("Aucune partie sauvegardee trouvee.\n");
+        return;
+    }
+
+
+    // nombre de joueurs
+    fscanf(file, "%d", N);
+
+    // Chargement du plateau
+    for (int i = 0; i < 17; i++) {
+        for (int j = 0; j < 17; j++) {
+            fscanf(file, "%d", &plateau[i][j]);
+        }
+    }
+
+    fclose(file);
+    printf("Partie chargee! Vous pouvez continuer celle-ci.\n");
 }
-/*void deplacer (int i,int x, int y,int tableau[17][17],int N) {
-    tableau[x][y] = i;
-    if(N==4) {
-        int av_x[4] = {0,8,16,8};
-        int av_y[4] = {8,0,8,16};
-        tableau[av_x[i-1]][av_y[i-1]] =0;
-        av_x[i-1] =x;
-        av_y[i-1]=y;
-        esthetique();
-        for(int j=0;j<17;j++) {
-            esthetique2(j);
-            for(int k=0;k<17;k++) {
-                printf("%d ", tableau[j][k]);
+int Annuler_coup(int player_turn,joueur joueur_actif,joueur joueur1,joueur joueur2,joueur joueur3,joueur joueur4,int plateau[17][17],int N) {
+    int choix;
+    printf("Souhaitez vous annuler votre coup\n");
+    printf("1. OUI 2. NON\n");
+    scanf("%d",&choix);
+    while(choix!=1 && choix!=2) {
+        printf("Erreur\n");
+        scanf("%d",&choix);
+    }
+    if(N==2) {
+        if(choix==1) {
+            printf("joueur %d est d'accord?\n",(player_turn)%2 +1);
+            printf("1. OUI 2. NON\n");
+            scanf("%d",&choix);
+            while(choix!=1 && choix!=2) {
+                printf("Erreur\n");
+                scanf("%d",&choix);
             }
-            printf("\n");
+            if(choix==1) {
+                plateau[joueur_actif.position.x][joueur_actif.position.y]=0;
+                if(player_turn==1) {
+                    plateau[joueur1.position.x][joueur1.position.y]=joueur1.pion;
+                    joueur1.position.x=joueur_actif.position.x;
+                    joueur_actif.position.y=joueur1.position.y;
+                }else {
+                    plateau[joueur2.position.x][joueur2.position.y]=joueur2.pion;
+                    joueur_actif.position.x=joueur2.position.x;
+                    joueur_actif.position.y=joueur2.position.y;
+                }
+            }
+        }else {
+            return 0;
         }
     }else {
-        int av_x[2] = {0,16};
-        int av_y[2] = {8,8};
-        tableau[av_x[i-1]][av_y[i-1]] =0;
-        av_x[i-1] =x;
-        av_y[i-1]=y;
-        esthetique();
-        for(int j=0;j<17;j++) {
-            esthetique2(j);
-            for(int k=0;k<17;k++) {
-                printf("%d ", tableau[j][k]);
+        if(choix==1) {
+            printf("joueur %d est d'accord?\n",(player_turn)%4 +1);
+            printf("1. OUI 2. NON\n");
+            scanf("%d",&choix);
+            while(choix!=1 && choix!=2) {
+                printf("Erreur\n");
+                scanf("%d",&choix);
             }
-            printf("\n");
+            if(choix==1) {
+                plateau[joueur_actif.position.x][joueur_actif.position.y]=0;
+                if(player_turn==1) {
+                    plateau[joueur1.position.x][joueur1.position.y]=joueur1.pion;
+                    joueur_actif.position.x=joueur1.position.x-2;
+                    joueur_actif.position.y=joueur1.position.y;
+                }else if (player_turn==2) {
+                    plateau[joueur2.position.x][joueur2.position.y]=joueur2.pion;
+                    joueur_actif.position.x=joueur2.position.x;
+                    joueur_actif.position.y=joueur2.position.y;
+                }else if(player_turn==3) {
+                    plateau[joueur3.position.x][joueur3.position.y]=joueur3.pion;
+                    joueur_actif.position.x=joueur3.position.x+2;
+                    joueur_actif.position.y=joueur3.position.y;
+                }else {
+                    plateau[joueur4.position.x][joueur4.position.y]=joueur4.pion;
+                    joueur_actif.position.x=joueur4.position.x;
+                    joueur_actif.position.y=joueur4.position.y;
+                }
+            }else {
+                return 0;
+            }
         }
     }
 }
-void menu_deplacer(int direction,int tab[17][17]) {
-
-}
-/*
- int choix;
-printf("1. Haut\n");
-printf("2. Bas\n");
-printf("3. Gauche\n");
-printf("4. Droite\n");
-scanf("%d", &choix);*/
