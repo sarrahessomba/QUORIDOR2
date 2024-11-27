@@ -296,7 +296,7 @@ void reprendre_partie(int plateau[17][17], int *N) {
     fclose(file);
     printf("Partie chargee! Vous pouvez continuer celle-ci.\n");
 }
-int Annuler_coup(int player_turn,joueur joueur_actif,joueur joueur1,joueur joueur2,joueur joueur3,joueur joueur4,int plateau[17][17],int N) {
+int Annuler_coup(int player_turn,int choix_menu,int x,int y,int direction,joueur * joueur_actif,joueur joueur1,joueur joueur2,joueur joueur3,joueur joueur4,int plateau[17][17],int N) {
     int choix;
     printf("Souhaitez vous annuler votre coup\n");
     printf("1. OUI 2. NON\n");
@@ -315,16 +315,31 @@ int Annuler_coup(int player_turn,joueur joueur_actif,joueur joueur1,joueur joueu
                 scanf("%d",&choix);
             }
             if(choix==1) {
-                plateau[joueur_actif.position.x][joueur_actif.position.y]=0;
-                if(player_turn==1) {
-                    plateau[joueur1.position.x][joueur1.position.y]=joueur1.pion;
-                    joueur1.position.x=joueur_actif.position.x;
-                    joueur_actif.position.y=joueur1.position.y;
-                }else {
-                    plateau[joueur2.position.x][joueur2.position.y]=joueur2.pion;
-                    joueur_actif.position.x=joueur2.position.x;
-                    joueur_actif.position.y=joueur2.position.y;
+                if(choix_menu==1){
+                    plateau[(joueur_actif->position.x)][joueur_actif->position.y]=0;
+                    if(player_turn==1) {
+                        plateau[joueur1.position.x][joueur1.position.y]=joueur1.pion;
+                        joueur_actif->position.x=joueur1.position.x;
+                        joueur_actif->position.y=joueur1.position.y;
+                    }else {
+                        plateau[joueur2.position.x][joueur2.position.y]=joueur2.pion;
+                        joueur_actif->position.x=joueur2.position.x;
+                        joueur_actif->position.y=joueur2.position.y;
+                    }
                 }
+            }else if(choix_menu==2) {
+                plateau[x][y]=0;
+                if(direction==1) {
+                    plateau[x-1][y]=0;
+                }else if(direction==2) {
+                    plateau[x+1][y]=0;
+                }else if(direction==3) {
+                    plateau[x][y-1]=0;
+                }else if(direction==4) {
+                    plateau[x][y+1]=0;
+                }
+            }else {
+                printf("rejouer\n");
             }
         }else {
             return 0;
@@ -339,23 +354,38 @@ int Annuler_coup(int player_turn,joueur joueur_actif,joueur joueur1,joueur joueu
                 scanf("%d",&choix);
             }
             if(choix==1) {
-                plateau[joueur_actif.position.x][joueur_actif.position.y]=0;
-                if(player_turn==1) {
-                    plateau[joueur1.position.x][joueur1.position.y]=joueur1.pion;
-                    joueur_actif.position.x=joueur1.position.x-2;
-                    joueur_actif.position.y=joueur1.position.y;
-                }else if (player_turn==2) {
-                    plateau[joueur2.position.x][joueur2.position.y]=joueur2.pion;
-                    joueur_actif.position.x=joueur2.position.x;
-                    joueur_actif.position.y=joueur2.position.y;
-                }else if(player_turn==3) {
-                    plateau[joueur3.position.x][joueur3.position.y]=joueur3.pion;
-                    joueur_actif.position.x=joueur3.position.x+2;
-                    joueur_actif.position.y=joueur3.position.y;
+                if(choix_menu==1) {
+                    plateau[joueur_actif->position.x][joueur_actif->position.y]=0;
+                    if(player_turn==1) {
+                        plateau[joueur1.position.x][joueur1.position.y]=joueur1.pion;
+                        joueur_actif->position.x=joueur1.position.x;
+                        joueur_actif->position.y=joueur1.position.y;
+                    }else if (player_turn==2) {
+                        plateau[joueur2.position.x][joueur2.position.y]=joueur2.pion;
+                        joueur_actif->position.x=joueur2.position.x;
+                        joueur_actif->position.y=joueur2.position.y;
+                    }else if(player_turn==3) {
+                        plateau[joueur3.position.x][joueur3.position.y]=joueur3.pion;
+                        joueur_actif->position.x=joueur3.position.x;
+                        joueur_actif->position.y=joueur3.position.y;
+                    }else {
+                        plateau[joueur4.position.x][joueur4.position.y]=joueur4.pion;
+                        joueur_actif->position.x=joueur4.position.x;
+                        joueur_actif->position.y=joueur4.position.y;
+                    }
+                }else if (choix_menu==2) {
+                    plateau[x][y]=0;
+                    if(direction==1) {
+                        plateau[x-1][y]=0;
+                    }else if(direction==2) {
+                        plateau[x+1][y]=0;
+                    }else if(direction==3) {
+                        plateau[x][y-1]=0;
+                    }else {
+                        plateau[x][y+1]=0;
+                    }
                 }else {
-                    plateau[joueur4.position.x][joueur4.position.y]=joueur4.pion;
-                    joueur_actif.position.x=joueur4.position.x;
-                    joueur_actif.position.y=joueur4.position.y;
+                    printf("rejouer\n");
                 }
             }else {
                 return 0;
