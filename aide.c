@@ -1,53 +1,81 @@
+#include <stdbool.h>
 #include <stdio.h>
-#include "Aide.h"
 
-void afficherAide() {
-    // affiche les règles du jeu
-    printf("Regles du jeu :\n");
-    printf("- Chaque joueur doit atteindre le bord oppose du plateau pour gagner.\n");
-    printf("- A chaque tour, un joueur peut deplacer son pion ou placer une barriere ou meme passer son tour.\n");
-    printf("- Les barrieres peuvent etre placees pour bloquer l'adversaire, mais elles ne doivent pas definitivement bloquer l'acces au cote oppose.\n");
-    printf("- Un pion peut sauter au-dessus un autre pion (adjacent) si aucune barriere ne le bloque.\n");
-    printf("- Le jeu se termine lorsqu'un joueur atteint le bord oppose de sa ligne de départ.\n");
+#define TAILLE 17 // Taille du plateau adaptée pour 17x17
 
-}
-// permet d'afficher les scores 
-void afficherScores() {
+// Définition du plateau et des barrières
+char plateau[TAILLE][TAILLE];
 
-    FILE *file = fopen("scores.txt", "r");
-    if (file == NULL) {
-        printf("Aucun score sauvegardee .\n");
-        return;
-    }
+// Fonction prototype
+bool est_bloque(int joueur_x, int joueur_y, int cible);
 
-    char nom[50];
-    int score;
-    printf("Scores des joueurs :\n");
-    while (fscanf(file, "%s %d", nom, &score) != EOF) {
-        printf("Joueur: %s, Score: %d\n", nom, score);
-    }
-}
+// BFS pour vérifier si un chemin existe
+bool chemin_existe(int x, int y, int cible) {
+    bool visite[TAILLE][TAILLE] = {false};
+    int queue[TAILLE * TAILLE][2], debut = 0, fin = 0;
+    queue[fin][0] = x;
+    queue[fin][1] = y;
+    fin++;
+    visite[x][y] = true;
 
-// charge une partie après la sauvegarde de celle-ci
-    void reprendre_partie(int plateau[17][17], int *N) {
-        FILE *file = fopen("sauvegarde_partie.txt", "r");
-        if (file == NULL) {
-            printf("Aucune partie sauvegardee trouvee.\n");
-            return;
-        }
+    // Directions possibles
+    int dx[] = {-1, 1, 0, 0};
+    int dy[] = {0, 0, -1, 1};
 
+    while (debut < fin) {
+        int cx = queue[debut][0];
+        int cy = queue[debut][1];
+        debut++;
 
-        // nombre de joueurs
-        fscanf(file, "%d", N);
+        // Si la ligne cible est atteinte
+        if (cx == cible) return true;
 
-        // Chargement du plateau
-        for (int i = 0; i < 17; i++) {
-            for (int j = 0; j < 17; j++) {
-                fscanf(file, "%d", &plateau[i][j]);
+        // Parcours des voisins
+        for (int i = 0; i < 4; i++) {
+            int nx = cx + dx[i];
+            int ny = cy + dy[i];
+
+            // Vérification des limites et des barrières
+            if (nx >= 0 && nx < TAILLE && ny >= 0 && ny < TAILLE &&
+                !visite[nx][ny] && plateau[nx][ny] == '.') {
+                queue[fin][0] = nx;
+                queue[fin][1] = ny;
+                fin++;
+                visite[nx][ny] = true;
             }
         }
-
-        fclose(file);
-        printf("Partie chargée! Vous pouvez continuer celle-ci.\n");
     }
 
+    return false; // Aucun chemin trouvé
+}
+
+// Fonction principale : détecter le blocage
+bool est_bloque(int joueur_x, int joueur_y, int cible) {
+    // Vérifie si le joueur peut atteindre sa cible
+    if (!chemin_existe(joueur_x, joueur_y, cible)) {
+        return true; // Pas de chemin vers la cible
+    }
+
+    return false; // Au moins un chemin existe
+}
+
+int main() {
+    // Initialisation d'exemple
+    // '.' représente une case vide
+    // 'B' représente une barrière
+    for (int i = 0; i < TAILLE; i++)
+        for (int j = 0; j < TAILLE; j++)
+            plateau[i][j] = '.';
+
+    plateau[8][8] = 'B'; // Exemple de barrière
+
+    // Position et cible du joueur (exemple pour un joueur)
+    int joueur_x = 0, joueur_y = 8, cible = 16;
+
+    if (est_bloque(joueur_x, joueur_y, cible)) {
+        printf("La partie est bloquée !\n");
+    } else {
+        printf("La partie peut continuer.\n");
+    }
+
+    return 0;
