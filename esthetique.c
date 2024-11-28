@@ -1,106 +1,81 @@
+#include <stdbool.h>
 #include <stdio.h>
-#include "ESTHETIQUE.h"
 
-// Appel de la fonction permettant de rendre plus esthetique le plateau
-// Structure pour un joueur
-typedef struct {
-    int id;        // ID du joueur
-    char pion;     // Jeton choisi par le joueur
-} Joueur;
+#define TAILLE 17 // Taille du plateau adaptée pour 17x17
 
-// Esthétique supérieure et inférieure du plateau
-void esthetique() {
-    printf("  ");
-    for (int i = 0; i < 17; i++) {
-        printf(" %c", (i % 2 == 0 ? '+' : '-'));
+// Définition du plateau et des barrières
+char plateau[TAILLE][TAILLE];
+
+// Fonction prototype
+bool est_bloque(int joueur_x, int joueur_y, int cible);
+
+// BFS pour vérifier si un chemin existe
+bool chemin_existe(int x, int y, int cible) {
+    bool visite[TAILLE][TAILLE] = {false};
+    int queue[TAILLE * TAILLE][2], debut = 0, fin = 0;
+    queue[fin][0] = x;
+    queue[fin][1] = y;
+    fin++;
+    visite[x][y] = true;
+
+    // Directions possibles
+    int dx[] = {-1, 1, 0, 0};
+    int dy[] = {0, 0, -1, 1};
+
+    while (debut < fin) {
+        int cx = queue[debut][0];
+        int cy = queue[debut][1];
+        debut++;
+
+        // Si la ligne cible est atteinte
+        if (cx == cible) return true;
+
+        // Parcours des voisins
+        for (int i = 0; i < 4; i++) {
+            int nx = cx + dx[i];
+            int ny = cy + dy[i];
+
+            // Vérification des limites et des barrières
+            if (nx >= 0 && nx < TAILLE && ny >= 0 && ny < TAILLE &&
+                !visite[nx][ny] && plateau[nx][ny] == '.') {
+                queue[fin][0] = nx;
+                queue[fin][1] = ny;
+                fin++;
+                visite[nx][ny] = true;
+            }
+        }
     }
-    printf("\n");
+
+    return false; // Aucun chemin trouvé
 }
 
-// Esthétique des numéros de lignes
-void esthetique2(int i) {
-    if (i < 10) {
-        printf("%d ", i);
+// Fonction principale : détecter le blocage
+bool est_bloque(int joueur_x, int joueur_y, int cible) {
+    // Vérifie si le joueur peut atteindre sa cible
+    if (!chemin_existe(joueur_x, joueur_y, cible)) {
+        return true; // Pas de chemin vers la cible
+    }
+
+    return false; // Au moins un chemin existe
+}
+
+int main() {
+    // Initialisation d'exemple
+    // '.' représente une case vide
+    // 'B' représente une barrière
+    for (int i = 0; i < TAILLE; i++)
+        for (int j = 0; j < TAILLE; j++)
+            plateau[i][j] = '.';
+
+    plateau[8][8] = 'B'; // Exemple de barrière
+
+    // Position et cible du joueur (exemple pour un joueur)
+    int joueur_x = 0, joueur_y = 8, cible = 16;
+
+    if (est_bloque(joueur_x, joueur_y, cible)) {
+        printf("La partie est bloquée !\n");
     } else {
-        printf("%c ", 'A' + (i - 10)); // Convertit en lettres pour les numéros au-delà de 9
+        printf("La partie peut continuer.\n");
     }
-}
 
-// Affiche les options de pions disponibles
-void afficherOptionsPions() {
-    printf("Choisissez un pion pour le joueur. Voici quelques options :\n");
-    int start = 33; // Premier caractère imprimable (ASCII 33)
-    int end = 126;  // Dernier caractère imprimable (ASCII 126)
-    for (int i = start; i <= end; i++) {
-        printf("%d. %c\n", i - start + 1, (char)i);
-    }
-}
-
-// Vérifie si un pion a déjà été choisi
-bool pionDejaUtilise(char pion, Joueur joueurs[], int nbJoueurs) {
-    for (int i = 0; i < nbJoueurs; i++) {
-        if (joueurs[i].pion == pion) {
-            return true;
-        }
-    }
-    return false;
-}
-
-// Permet à un joueur de choisir un pion
-void choisirPion(Joueur *joueur, Joueur joueurs[], int nbJoueurs) {
-    int choix;
-    char pion;
-    do {
-        afficherOptionsPions();
-        printf("Entrez le numéro correspondant à votre choix : ");
-        if (scanf("%d", &choix) != 1 || choix < 1 || choix > (126 - 33 + 1)) {
-            while (getchar() != '\n'); // Vide le buffer pour gérer les entrées invalides
-            printf("Entrée invalide. Réessayez.\n");
-            continue;
-        }
-        pion = (char)(33 + choix - 1);
-        if (pionDejaUtilise(pion, joueurs, nbJoueurs)) {
-            printf("Ce pion est déjà utilisé par un autre joueur. Choisissez-en un autre.\n");
-        } else {
-            break;
-        }
-    } while (true);
-
-    joueur->pion = pion;
-    printf("Le pion du joueur %d est maintenant '%c'.\n", joueur->id, joueur->pion);
-}
-
-// Fonction pour afficher le plateau avec les pions personnalisés
-void afficherPlateau(int N, Joueur joueurs[], char tableau[17][17]) {
-    esthetique();
-    for (int i = 0; i < 17; i++) {
-        esthetique2(i);
-        for (int j = 0; j < 17; j++) {
-            int pionAffiche = 0;
-
-            // Vérifie si un joueur est à cette position
-            for (int k = 0; k < N; k++) {
-                if ((i == k * 8) && (j == 8 || j == 0 || j == 16)) {
-                    printf(" %c ", joueurs[k].pion);
-                    pionAffiche = 1;
-                    break;
-                }
-            }
-
-            // Sinon, affiche le contenu standard du tableau
-            if (!pionAffiche) {
-                if (tableau[i][j] == CASE_VIDE) {
-                    printf(" %c ", CASE_VIDE);
-                } else if (tableau[i][j] == BARRIERE) {
-                    printf(" %c ", BARRIERE);
-                } else if (tableau[i][j] == BARRIERE_H) {
-                    printf(" %c ", BARRIERE_H);
-                } else {
-                    printf(" %c ", tableau[i][j]);
-                }
-            }
-        }
-        printf("\n");
-    }
-    esthetique();
-}
+    return 0;
