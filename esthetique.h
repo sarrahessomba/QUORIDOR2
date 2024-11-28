@@ -17,7 +17,7 @@ typedef struct {
     char pion;     // Jeton choisi par le joueur
 } Joueur;
 
-// Prototypes des fonctions
+
 
 // Affichage des éléments esthétiques du plateau
 void esthetique();
