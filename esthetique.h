@@ -3,17 +3,13 @@
 
 #include <stdbool.h>
 
-// Définition des constantes pour le plateau
+
 #define MAX_PLAYERS 4
 #define CASE_VIDE '·'
 #define BARRIERE '|'
 #define BARRIERE_H '-'
 
-// Propriétés des pions par défaut
-#define PION_J1 '@'
-#define PION_J2 '#'
-#define PION_J3 '$'
-#define PION_J4 '%'
+
 
 // Structure pour représenter un joueur
 typedef struct {
