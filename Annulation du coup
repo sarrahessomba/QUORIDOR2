@@ -125,3 +125,4 @@ int Annuler_coup(int player_turn, int choix_menu, int x, int y, int direction,
         }
     }
 }
+
