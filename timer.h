@@ -1,16 +1,21 @@
 //
 // Created by sarra on 21/11/2024.
 //
-
 #ifndef TIMER_H
 #define TIMER_H
-#include "fonction.joueur.h"
+
 #include <time.h>
 
-// Structure pour stocker les informations de chaque joueur
+// Structure pour le chronomètre d'un joueur
+typedef struct Chronometre {
+    time_t debut_tour; // Temps de début du tour
+    int temps_restant; // Temps restant en secondes
+} Chronometre;
+
 // Prototypes des fonctions
-void jouerTour(joueur *joueur);
-int JoueurLePlusLongTemps(joueur joueurs[], int nombreJoueurs);
-#ifndef TIMER_H
-#endif // TIMER_H
-#endif //TIMER_H
+void initialiser_chronometre(Chronometre* chrono, int temps_total);
+void demarrer_chronometre(Chronometre* chrono);
+int obtenir_temps_restant(Chronometre* chrono);
+int temps_ecoule(Chronometre* chrono);
+
+#endif

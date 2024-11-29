@@ -10,145 +10,106 @@
 
 
 // Sauvegarder les scores dans un fichier
+int mettre_a_jour_score(joueur tab_joueur[], int N, const char* nomFichier) {
+    joueur joueurFichier;
+    FILE *fichier = fopen(nomFichier, "r");
+    FILE *fichiertemp = fopen("tempscore.txt", "w");
 
-/*
-int Sauvegarder_Scores(joueur joueur[],int N, const char *nomdufichier) {
-    FILE *fichier = fopen(nomdufichier, "a");
-    if (fichier == NULL) {
-        perror("Erreur de sauvegarde de scores");
+    if (fichier == NULL || fichiertemp == NULL) {
+        printf("Erreur d'ouverture du fichier pour mise a jour.\n");
+        if (fichier != NULL) fclose(fichier);
+        if (fichiertemp != NULL) fclose(fichiertemp);
         return -1;
     }
-    for(int i=0;i<N;i++) {
-        fprintf(fichier, "%s %d\n", joueur[i].nom, joueur[i].score);
-    }
-    fclose(fichier);
-    printf("Sauvegarde du score réussie\n");
-    return 0;
-}
-int trouverJoueur(joueur *joueurr, const char *nomdufichier) {
-    FILE *fichier = fopen(nomdufichier, "r");
-    if (fichier == NULL) {
-        perror("Erreur d'ouverture du fichier pour recherche");
-        return -1;
-    }
-    joueur joueurFichier;
-    while (fscanf(fichier, "%s %d", joueurFichier.nom, &joueurFichier.score) != EOF) {
-        if (strcasecmp(joueurr->nom, joueurFichier.nom) == 0) { // Noms identiques (sans distinction de casse)
-            fclose(fichier);
-            return joueurFichier.score;
-        }
-    }
-    fclose(fichier);
-    return -1; // Non trouvé
-}
-void mettreAJourScore(joueur joueurs[], int nbJoueurs, const char *nomdufichier) {
-    FILE *fichier = fopen(nomdufichier, "r");
-    FILE *tempFichier = fopen("temp_scores.txt", "w");
-    if (fichier == NULL || tempFichier == NULL) {
-        perror("Erreur lors de l'ouverture des fichiers pour mise à jour");
-        exit(1);
-    }
 
-    joueur joueurFichier;
-    int trouve;
-    // Mettre à jour les scores dans le fichier temporaire
+    // Tableau pour garder la trace des joueurs déjà traités
+    char noms_deja_vus[100][50]; // Maximum 100 joueurs de 50 caractères
+    int nb_vus = 0;
+
     while (fscanf(fichier, "%s %d", joueurFichier.nom, &joueurFichier.score) != EOF) {
-        trouve = 0;
-        for (int i = 0; i < nbJoueurs; i++) {
-            if (strcasecmp(joueurFichier.nom, joueurs[i].nom) == 0) {
-                joueurFichier.score += joueurs[i].score; // Mettre à jour le score
-                trouve = 1;
-                joueurs[i].score = 0; // Score déjà traité
+        int found = 0;
+
+        // Vérifier si ce joueur a déjà été traité (pour ignorer les doublons)
+        for (int k = 0; k < nb_vus; k++) {
+            if (strcasecmp(noms_deja_vus[k], joueurFichier.nom) == 0) {
+                found = 1;
                 break;
             }
         }
-        fprintf(tempFichier, "%s %d\n", joueurFichier.nom, joueurFichier.score);
-    }
 
-    // Ajouter les nouveaux joueurs non trouvés
-    for (int i = 0; i < nbJoueurs; i++) {
-        if (joueurs[i].score > 0) {
-            fprintf(tempFichier, "%s %d\n", joueurs[i].nom, joueurs[i].score);
+        if (!found) {//si found est faux==0
+            // Ajouter le nom à la liste des joueurs déjà vus
+            strcpy(noms_deja_vus[nb_vus], joueurFichier.nom);
+            nb_vus++;
+
+            // Mise à jour si le joueur existe dans tab_joueur
+            for (int i = 0; i < N; i++) {
+                if (strcasecmp(tab_joueur[i].nom, joueurFichier.nom) == 0) {
+                    joueurFichier.score = tab_joueur[i].score + joueurFichier.score;
+                    break;
+                }
+            }
+
+            // Écrire le score mis à jour ou inchangé dans le fichier temporaire
+            fprintf(fichiertemp, "%s %d\n", joueurFichier.nom, joueurFichier.score);
         }
     }
 
-    fclose(fichier);
-    fclose(tempFichier);
+    // Ajouter les nouveaux joueurs qui n'étaient pas dans le fichier
+    for (int i = 0; i < N; i++) {
+        int exists = 0;
 
-    // Remplace le fichier d'origine par le fichier temporaire
-    remove(nomdufichier);
-    rename("temp_scores.txt", nomdufichier);
-
-    printf("Mise à jour des scores terminée\n");
-}
-/*int Sauvegarder_Scores(joueur joueur[],int N,const char* nomfichier) {
-    FILE *fichier=NULL;
-    fichier=fopen(nomfichier,"a");
-    if(fichier==NULL) {
-        printf("Erreur de sauvegarde de scores\n");
-       return -1;
-    }
-    for(int i=0;i<N;i++) {
-        fprintf(fichier, "%s %d\n", joueur[i].nom, joueur[i].score);
-    }
-        fclose(fichier);
-        printf("Sauvergarde de score reussie\n");
-}
-
-// Trouver l'index d'un joueur dans le tableau (-1 si non trouvé)
-
-int trouverJoueur(joueur joueurs,const char* nomfichier) {
-    FILE *fichier=NULL;
-   fichier=fopen(nomfichier,"r");
-    joueur joueur;
-    if(fichier==NULL) {
-        printf("fichier inexixtant\n");
-        return -2;
-    }
-        while(fscanf(fichier,"%s %d",joueur.nom,&joueur.score)!=EOF) {
-            if(strcasecmp(joueur.nom,joueurs.nom)==0) {
-                joueur.score=joueur.score+joueurs.score;
-                return joueur.score;
+        for (int k = 0; k < nb_vus; k++) {
+            if (strcasecmp(noms_deja_vus[k], tab_joueur[i].nom) == 0) {
+                exists = 1;
+                break;
             }
         }
+
+        if (!exists) {
+            fprintf(fichiertemp, "%s %d\n", tab_joueur[i].nom, tab_joueur[i].score);
+        }
+    }
+
     fclose(fichier);
-    return -1;
+    fclose(fichiertemp);
+
+    remove(nomFichier);
+    rename("tempscore.txt", nomFichier);
+
+    return 0;
 }
 
-// Mise à jour du score d'un joueur
-int mettreAJourScore(joueur joueurs[], int nbJoueurs,const char* nomfichier) {
-    FILE *fichier=NULL;
-    FILE *fichiertemp=NULL;
-    fichier=fopen(nomfichier,"r");
-    fichiertemp=fopen("fichiertempscore.txt","w");
-    if(fichier==NULL||fichiertemp==NULL) {
-        printf("Erreur de mis a jour de scores\n");
+int sauvegardescore(joueur tab_joueur[],int N,const char * nomFichier) {
+    FILE* fichier=NULL;
+    fichier=fopen(nomFichier,"a");
+    if(fichier==NULL) {
+        printf("Erreur de sauvegarde\n");
         return -1;
     }
-    for(int i = 0; i <nbJoueurs ; i++) {
-       int d;
-        d=trouverJoueur(joueurs[i],nomfichier);
-        if(d==-1) {
-            fprintf(fichiertemp,"%s %d\n",joueurs[i].nom, joueurs[i].score);
-        }
-        fprintf(fichiertemp,"%s %d\n",joueurs[i].nom,d);
+    for(int i=0;i<N;i++) {
+        fprintf(fichier,"%s %d\n",tab_joueur[i].nom,tab_joueur[i].score);
     }
-    fclose(fichiertemp);
     fclose(fichier);
-    remove(nomfichier);
-    rename("fichiertempscore.txt",nomfichier);
-    printf("Mis a jour reussi\n");
-}*/
-void afficherScores(const char * nomdufichier,joueur * joueur) {
+    return 0;
+}
+
+int afficherScores(const char * nomdufichier) {
+    joueur joueurfichier;
     FILE *fichier;
     fichier=fopen(nomdufichier,"r");
     if (fichier == NULL) {
         printf("Erreur d'affichage de score.\n");
-        exit(1);
+        return -1;
     }
-    while(fscanf(fichier,"%s %d",joueur->nom,&(joueur->score))!=EOF) {
-        printf("%s %d\n",(joueur->nom),(joueur->score));
+    while(fscanf(fichier,"%s %d",joueurfichier.nom,&(joueurfichier.score))!=EOF) {
+        if(joueurfichier.score>0) {
+            printf("%s %d\n",(joueurfichier.nom),(joueurfichier.score)-5);
+        }else {
+            printf("%s %d\n",(joueurfichier.nom),(joueurfichier.score));
+        }
     }
     fclose(fichier);
     printf("Affichage des scores reussie\n");
+    return 0;
 }

@@ -12,7 +12,7 @@
 // Structure pour représenter un joueur
 
 // Prototypes des fonctions
-void mettreAJourScore(joueur joueurs[], int nbJoueurs,const char* nomfichier);
-void afficherScores(joueur * joueur);
-int Sauvegarder_Scores(joueur joueur[],int N,const char* nomfichier);
+int afficherScores(const char * nomdufichier);
+int mettre_a_jour_score(joueur tab_joueur[],int N,const char* nomFichier);
+int sauvegardescore(joueur tab_joueur[],int N,const char * nomFichier);
 #endif //SCORE_H

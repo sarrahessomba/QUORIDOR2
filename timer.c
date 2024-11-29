@@ -6,26 +6,27 @@
 #include "fonction.joueur.h"
 
 // Fonction pour jouer un tour et calculer le temps écoulé pour le joueur
-void jouerTour(joueur *joueur) {
-    time_t debutTour = time(NULL);  // Enregistre le temps de début du tour
+#include "timer.h"
 
-    printf("Tour en cours. Appuyez sur 'e' pour terminer le tour.\n");
-    while (getchar() != 'e');  // Attend que l'utilisateur appuie sur 'e'
-
-    time_t finTour = time(NULL);  // Temps à la fin du tour
-    double tempsEcoule = difftime(finTour, debutTour);
-    joueur->tempsTotal += tempsEcoule;  // Ajoute le temps écoulé au total
-
-    printf("Temps écoulé pour ce tour : %.0f secondes\n", tempsEcoule);
+// Initialiser le chronomètre avec le temps total alloué (en secondes)
+void initialiser_chronometre(Chronometre* chrono, int temps_total) {
+    chrono->temps_restant = temps_total;
+    chrono->debut_tour = 0; // Pas encore démarré
 }
 
-// Fonction pour trouver le joueur avec le plus de temps de jeu
-int JoueurLePlusLongTemps(joueur joueurs[], int nombreJoueurs) {
-    int indiceMax = 0;
-    for (int i = 1; i < nombreJoueurs; i++) {
-        if (joueurs[i].tempsTotal > joueurs[indiceMax].tempsTotal) {
-            indiceMax = i;
-        }
-    }
-    return indiceMax;
+// Démarrer le chronomètre pour un joueur
+void demarrer_chronometre(Chronometre* chrono) {
+    chrono->debut_tour = time(NULL);
+}
+
+// Obtenir le temps restant pour le joueur
+int obtenir_temps_restant(Chronometre* chrono) {
+    if (chrono->debut_tour == 0) return chrono->temps_restant; // Non démarré
+    time_t ecoule = time(NULL) - chrono->debut_tour;
+    return chrono->temps_restant - ecoule;
+}
+
+// Vérifier si le temps est écoulé
+int temps_ecoule(Chronometre* chrono) {
+    return obtenir_temps_restant(chrono) <= 0;
 }

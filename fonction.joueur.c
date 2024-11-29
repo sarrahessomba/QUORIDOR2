@@ -134,7 +134,7 @@ joueur deplacer(int direction,joueur joueur_actif,joueur adversaire,joueur adver
         if((x==adv_x1 && y==adv_y1)||(x==adv_x2 && y==adv_y2)||(x==adv_x3 && y==adv_y3) ||(x==adv_x4 && y==adv_y4)) {
             if(direction==1 || direction==2) {
                 int direct;
-                if(((tab[x-1][y]==7&& direction==1)||(tab[x+1][y]==7 && direction==2))){//barriere derriere un joueur
+                if(((tab[x-1][y]==7 && direction==1)||(tab[x+1][y]==7 && direction==2))){//barriere derriere un joueur
                     printf("3.Gauche ou 4.Droite\n");
                     scanf("%d",&direct);
                     while(direct!=3 && direct!=4) {
@@ -244,7 +244,7 @@ int a_gagner(joueur joueur1,joueur joueur2,joueur joueur3,joueur joueur4,int N) 
         }
         if(joueur4.position.y==0) {
             return 4;
-        }
+        }//blocage de la partie
         if(joueur1.nb_barr==0 && joueur2.nb_barr==0 && joueur3.nb_barr==0 && joueur4.nb_barr==0) {
             return -1;
         }
@@ -257,7 +257,7 @@ int valid_barriere(int x,int y,int direction_bar,joueur joueur_actif,int tab[17]
     }
     if(joueur_actif.nb_barr==0) {
         printf("Vous n'avez plus de barrieres\n");
-        return 0;
+        return -1;
     }
     return 1;
 }
@@ -298,6 +298,7 @@ void reprendre_partie(int plateau[17][17], int *N) {
 }
 int Annuler_coup(int player_turn,int choix_menu,int x,int y,int direction,joueur * joueur_actif,joueur joueur1,joueur joueur2,joueur joueur3,joueur joueur4,int plateau[17][17],int N) {
     int choix;
+    int choixx;
     printf("Souhaitez vous annuler votre coup\n");
     printf("1. OUI 2. NON\n");
     scanf("%d",&choix);
@@ -309,12 +310,12 @@ int Annuler_coup(int player_turn,int choix_menu,int x,int y,int direction,joueur
         if(choix==1) {
             printf("joueur %d est d'accord?\n",(player_turn)%2 +1);
             printf("1. OUI 2. NON\n");
-            scanf("%d",&choix);
-            while(choix!=1 && choix!=2) {
+            scanf("%d",&choixx);
+            while(choixx!=1 && choixx!=2) {
                 printf("Erreur\n");
                 scanf("%d",&choix);
             }
-            if(choix==1) {
+            if(choixx==1) {
                 if(choix_menu==1){
                     plateau[(joueur_actif->position.x)][joueur_actif->position.y]=0;
                     if(player_turn==1) {
@@ -326,20 +327,22 @@ int Annuler_coup(int player_turn,int choix_menu,int x,int y,int direction,joueur
                         joueur_actif->position.x=joueur2.position.x;
                         joueur_actif->position.y=joueur2.position.y;
                     }
-                }
-            }else if(choix_menu==2) {
-                plateau[x][y]=0;
-                if(direction==1) {
-                    plateau[x-1][y]=0;
-                }else if(direction==2) {
-                    plateau[x+1][y]=0;
-                }else if(direction==3) {
-                    plateau[x][y-1]=0;
-                }else if(direction==4) {
-                    plateau[x][y+1]=0;
+                }else if(choix_menu==2) {
+                    plateau[x][y]=0;
+                    if(direction==1) {
+                        plateau[x-1][y]=0;
+                    }else if(direction==2) {
+                        plateau[x+1][y]=0;
+                    }else if(direction==3) {
+                        plateau[x][y-1]=0;
+                    }else if(direction==4) {
+                        plateau[x][y+1]=0;
+                    }
+                }else {
+                    printf("rejouer\n");
                 }
             }else {
-                printf("rejouer\n");
+                return 0;
             }
         }else {
             return 0;
@@ -348,12 +351,12 @@ int Annuler_coup(int player_turn,int choix_menu,int x,int y,int direction,joueur
         if(choix==1) {
             printf("joueur %d est d'accord?\n",(player_turn)%4 +1);
             printf("1. OUI 2. NON\n");
-            scanf("%d",&choix);
-            while(choix!=1 && choix!=2) {
+            scanf("%d",&choixx);
+            while(choixx!=1 && choixx!=2) {
                 printf("Erreur\n");
                 scanf("%d",&choix);
             }
-            if(choix==1) {
+            if(choixx==1) {
                 if(choix_menu==1) {
                     plateau[joueur_actif->position.x][joueur_actif->position.y]=0;
                     if(player_turn==1) {
@@ -390,6 +393,8 @@ int Annuler_coup(int player_turn,int choix_menu,int x,int y,int direction,joueur
             }else {
                 return 0;
             }
+        }else {
+            return 0;
         }
     }
 }
